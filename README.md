@@ -102,3 +102,68 @@ Run this when you want to start fresh or switch between toolchains/build systems
 - Use `clean.sh` if you encounter build issues or switch toolchains.
 
 ---
+
+Here's the English version of your BMP file documentation:
+
+## 🖼️ Working with BMP Files
+
+`BMPFile` is a C++ class designed for loading, saving, and basic processing of BMP (Bitmap) files. It supports both 24-bit (BGR) and 32-bit (BGRA) formats and provides a low-level API for image manipulation.
+
+---
+
+### 🚀 Features
+
+| Functionality         | Description                                                  | Method                      |
+| --------------------- | ------------------------------------------------------------ | --------------------------- |
+| 🔄 Loading & Saving   | Supports reading/writing uncompressed BMP files (24/32 bit)  | `load()` / `save()`         |
+| 🧱 Pixel Manipulation | Get and set individual pixels                                | `getPixel()` / `setPixel()` |
+| 🔃 Vertical Flip      | Fast vertical image flipping                                 | `flipVertically()`          |
+| ⚫⚪ B/W Conversion   | Converts color images to black and white (with thresholding) | `convertToBlackAndWhite()`  |
+| 🆕 Image Creation     | Creates a new blank image with specified size and format     | `create()`                  |
+
+---
+
+### 📦 Supported Formats
+
+- ✅ 24-bit BMP (BGR)
+- ✅ 32-bit BMP (BGRA)
+- ❌ Not supported: RLE compression, palettes, other non-standard BMP variants
+
+---
+
+### 📚 Quick Usage Example
+
+```cpp
+#include "BMPFile.hpp"
+#include <iostream>
+
+int main() {
+    BMPFile image;
+
+    if (!image.load("input.bmp")) {
+        std::cerr << "Error loading BMP file!\n";
+        return 1;
+    }
+
+    image.convertToBlackAndWhite();   // Convert to B/W
+    image.flipVertically();           // Flip vertically
+
+    if (!image.save("output.bmp")) {
+        std::cerr << "Error saving BMP file!\n";
+        return 1;
+    }
+
+    std::cout << "Processing completed successfully!\n";
+    return 0;
+}
+```
+
+---
+
+### 🛠 Class Structure
+
+| Component   | Purpose                              |
+| ----------- | ------------------------------------ |
+| `BMPHeader` | BMP file header (type, size, offset) |
+| `DIBHeader` | Size, depth, compression information |
+| `Pixel`     | Single pixel representation (RGB[A]) |

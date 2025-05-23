@@ -42,19 +42,7 @@ This script configures and compiles the project using CMake. It automatically cr
 
 ---
 
-### ▶️ 3. `scripts/run.sh` — Run the Application
-
-```bash
-./scripts/run.sh [arguments...]
-```
-
-> **Purpose:** Launches the `BMP_Sketcher` executable with optional command-line arguments.
-
-Automatically checks that the application is built. If not, it reminds you to run the build script first. Useful for quick iteration and testing.
-
----
-
-### 🧪 4. `scripts/test.sh` — Run Unit Tests
+### 🧪 3. `scripts/test.sh` — Run Unit Tests
 
 ```bash
 ./scripts/test.sh
@@ -70,7 +58,7 @@ Automatically checks that the application is built. If not, it reminds you to ru
 
 ---
 
-### 🧹 5. `scripts/clean.sh` — Clean the Build Environment
+### 🧹 4. `scripts/clean.sh` — Clean the Build Environment
 
 ```bash
 ./scripts/clean.sh
@@ -88,7 +76,6 @@ Run this when you want to start fresh or switch between toolchains/build systems
 | ------------------------- | ------------------------------------------- | ---------------------------- |
 | `install_dependencies.sh` | Installs all required dependencies (Ubuntu) | `./install_dependencies.sh`  |
 | `scripts/build.sh`        | Builds the project (Debug/Release)          | `./scripts/build.sh Release` |
-| `scripts/run.sh`          | Runs the application                        | `./scripts/run.sh input.bmp` |
 | `scripts/test.sh`         | Runs unit tests and benchmarks (if enabled) | `./scripts/test.sh`          |
 | `scripts/clean.sh`        | Deletes the build directory                 | `./scripts/clean.sh`         |
 
@@ -97,7 +84,7 @@ Run this when you want to start fresh or switch between toolchains/build systems
 ## 🧠 Best Practices
 
 - Run `install_dependencies.sh` once after cloning the project.
-- Use `build.sh` and `test.sh` during development.
+- Use `build.sh` during development.
 - Use `run.sh` to test input/output behavior.
 - Use `clean.sh` if you encounter build issues or switch toolchains.
 
@@ -167,3 +154,38 @@ int main() {
 | `BMPHeader` | BMP file header (type, size, offset) |
 | `DIBHeader` | Size, depth, compression information |
 | `Pixel`     | Single pixel representation (RGB[A]) |
+
+---
+
+## 🖌️ Draw Strategy Factory
+
+Welcome to **Draw Strategy Factory** — a module for flexible and multithreaded drawing on BMP images! Choose your strategy 🧠, set the color 🎨 and thickness ✍️ — and go ahead, create masterpieces!
+
+---
+
+### 🔍 What is this?
+
+This project implements the **Strategy Pattern** via a factory, enabling drawing on BMP files using different approaches:
+
+- 🧵 **NONE** — Standard single-threaded implementation
+- 💥 **OPENMP** — Multithreading via OpenMP
+- ⚙️ **THREAD** — Classic threads
+
+---
+
+### 🧱 Architecture
+
+#### 🎭 `IDrawStrategy` — Your Artist's Contract
+
+An interface that each strategy must implement:
+
+| Method               | Description                 |
+| -------------------- | --------------------------- |
+| `draw(BMPFile&)`     | Draw something on the image |
+| `getName()`          | Get the strategy name       |
+| `setColor(Pixel)`    | Set the color 🎨            |
+| `getColor()`         | Get the current color       |
+| `setThickness(uint)` | Set line thickness          |
+| `getThickness()`     | Check current thickness     |
+
+---

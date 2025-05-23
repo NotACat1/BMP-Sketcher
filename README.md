@@ -1,6 +1,6 @@
 🎨 BMP-Sketcher: The Ultimate Image Processing Playground 🖌️
 
-![Banner](https://placehold.co/1200x400/2d2d2d/FFF?text=BMP-Sketcher\nPaint%20Your%20Digital%20Dreams&font=montserrat)
+![Banner](output.bmp)
 
 **Transform ordinary images into extraordinary art** with BMP-Sketcher - where C++ meets creativity! A multi-threaded, strategy-powered image processing toolkit that turns your BMP files into canvases for digital expression.
 

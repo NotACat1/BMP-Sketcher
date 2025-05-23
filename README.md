@@ -1,5 +1,126 @@
 # BMP-Sketcher
 
+`BMP-Sketcher` is a utility for processing BMP images 🖼️ with capabilities for drawing using various strategies (single-threaded and multi-threaded), converting images to grayscale, and displaying results in the console.
+
+---
+
+## 📦 Class: `BMPProcessor`
+
+### 🔧 Constructor
+
+```cpp
+BMPProcessor(const Config& config, std::unique_ptr<IDrawStrategy> strategy)
+```
+
+**Parameters:**
+
+- `config` — Configuration obtained via command line.
+- `strategy` — Pointer to the selected drawing strategy (`IDrawStrategy`).
+
+Initializes the processor and sets the color and thickness for the drawing strategy.
+
+---
+
+### 🔁 Method: `bool process()`
+
+Processes the image:
+
+1. Loads the BMP file.
+2. Performs drawing using the selected strategy (if specified).
+3. Converts the image to grayscale.
+4. Saves the result to the output file.
+
+**Returns:** `true` if successful; `false` on error.
+
+---
+
+### 🖥️ Method: `void display() const`
+
+Displays the image in the console using two symbols:
+
+- First symbol (`on_char`) — for bright pixels.
+- Second symbol (`off_char`) — for dark pixels.
+
+Brightness is calculated using the formula:
+
+```
+brightness = 0.299 * R + 0.587 * G + 0.114 * B
+```
+
+---
+
+### ⚙️ Nested Class: `Config`
+
+#### 🧩 Method
+
+```cpp
+static Config parse(int argc, char* argv[])
+```
+
+Parses command-line arguments and returns the configuration.
+
+**Supported arguments:**
+
+| Key                     | Description                                 |
+| ----------------------- | ------------------------------------------- |
+| `-i, --input <file>`    | Path to input BMP file (**required**)       |
+| `-o, --output <file>`   | Path to output file (default: `output.bmp`) |
+| `-t, --thickness <n>`   | Line thickness (≥ 1, default: `1`)          |
+| `-c, --color R,G,B[,A]` | Color in RGBA format (default: `0,0,0,255`) |
+| `-d, --display XY`      | Symbols for display (default: `"# "`)       |
+| `-s, --strategy <name>` | Strategy: `none`, `openmp`, `thread`        |
+| `-h, --help`            | Show help and exit                          |
+
+Throws an exception for unknown strategies.
+
+---
+
+#### 🆘 Method
+
+```cpp
+static void printHelp(const std::string& program_name)
+```
+
+Displays program usage help in the console.
+
+**Example usage:**
+
+```bash
+./bmp_processor -i input.bmp -o out.bmp -t 2 -c 255,0,0 -s openmp
+```
+
+---
+
+## 📌 Usage Example
+
+```cpp
+int main(int argc, char* argv[]) {
+    try {
+        auto config = BMPProcessor::Config::parse(argc, argv);
+        auto strategy = DrawStrategyFactory::create(config.strategy_type);
+        BMPProcessor processor(config, std::move(strategy));
+
+        if (processor.process()) {
+            processor.display(); // Console output
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+}
+```
+
+---
+
+## 💡 Features
+
+✅ Custom color and thickness support  
+✅ Console preview  
+✅ Flexible drawing strategy selection  
+✅ Error handling  
+✅ Transparency (Alpha) support
+
+---
+
 ## 🛠 Scripts & Project Automation
 
 To streamline the development workflow and ensure consistency across environments, `BMP_Sketcher` includes a comprehensive set of utility scripts located in the [`scripts/`](scripts/) directory. These scripts handle building, testing, running, cleaning, and code coverage — as well as a top-level dependency installation script to get you started instantly.

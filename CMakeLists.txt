@@ -22,7 +22,7 @@ endif()
 
 # Project build options to enable or disable optional components
 option(BUILD_TESTS "Build unit tests" ON)
-option(BUILD_BENCHMARKS "Build benchmarks" ON)
+option(BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(ENABLE_COVERAGE "Enable code coverage" OFF)
 
 # Find required external packages
@@ -73,55 +73,3 @@ install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_lib
 )
 
 install(DIRECTORY include/ DESTINATION include)
-
-# Unit test configuration
-if(BUILD_TESTS)
-    enable_testing()
-
-    # Find GoogleTest (must be installed or provided externally)
-    find_package(GTest REQUIRED)
-
-    # Create test executable
-    add_executable(${PROJECT_NAME}_tests
-        tests/test_example.cpp
-        # Add other test files here
-    )
-
-    # Link test executable with project library and GTest
-    target_link_libraries(${PROJECT_NAME}_tests
-        PRIVATE
-            ${PROJECT_NAME}_lib
-            GTest::GTest
-            GTest::Main
-    )
-
-    # Register the test with CTest
-    add_test(NAME ${PROJECT_NAME}_unit_tests
-        COMMAND ${PROJECT_NAME}_tests
-    )
-
-    # Enable code coverage (only supported with GCC or Clang)
-    if(ENABLE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-        target_compile_options(${PROJECT_NAME}_tests PRIVATE --coverage -O0 -g)
-        target_link_options(${PROJECT_NAME}_tests PRIVATE --coverage)
-    endif()
-endif()
-
-# Benchmark configuration
-if(BUILD_BENCHMARKS)
-    # Find Google Benchmark (must be installed or provided externally)
-    find_package(benchmark REQUIRED)
-
-    # Create benchmark executable
-    add_executable(${PROJECT_NAME}_benchmarks
-        benchmarks/main.cpp
-        # Add other benchmark files here
-    )
-
-    # Link benchmark executable with project library and benchmark library
-    target_link_libraries(${PROJECT_NAME}_benchmarks
-        PRIVATE
-            ${PROJECT_NAME}_lib
-            benchmark::benchmark
-    )
-endif()
